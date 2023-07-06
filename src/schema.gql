@@ -22,7 +22,7 @@ type Mutation {
 }
 
 type Query {
-  item(id: Int!): Item!
+  item(id: ID!): Item!
   items: [Item!]!
 }
 
