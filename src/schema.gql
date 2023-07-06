@@ -27,7 +27,7 @@ type Query {
 }
 
 input UpdateItemInput {
-  id: Int!
+  id: ID!
   name: String
   quantity: Float
   quantityUnits: String
