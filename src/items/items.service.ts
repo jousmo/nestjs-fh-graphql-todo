@@ -10,7 +10,7 @@ export class ItemsService {
   }
 
   findAll() {
-    return `This action returns all items`;
+    return [];
   }
 
   findOne(id: number) {
