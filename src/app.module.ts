@@ -6,6 +6,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule } from './users/users.module';
 import * as process from 'process';
 
 @Module({
@@ -29,6 +30,7 @@ import * as process from 'process';
       autoLoadEntities: true,
     }),
     ItemsModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],

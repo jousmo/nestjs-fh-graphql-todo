@@ -16,6 +16,7 @@ type Item {
 }
 
 type Mutation {
+  blockUser(id: ID!): User!
   createItem(createItemInput: CreateItemInput!): Item!
   removeItem(id: ID!): Item!
   updateItem(updateItemInput: UpdateItemInput!): Item!
@@ -24,6 +25,8 @@ type Mutation {
 type Query {
   item(id: ID!): Item!
   items: [Item!]!
+  user(id: ID!): User!
+  users: [User!]!
 }
 
 input UpdateItemInput {
@@ -31,4 +34,12 @@ input UpdateItemInput {
   name: String
   quantity: Float
   quantityUnits: String
+}
+
+type User {
+  email: String!
+  fullName: String!
+  id: ID!
+  isActive: Boolean!
+  roles: [String!]!
 }
