@@ -3,6 +3,7 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -44,6 +45,14 @@ export class UsersService {
     return user;
   }
 
+  async findOneByEmail(email: string): Promise<User> {
+    try {
+      return await this.userRepository.findOneByOrFail({ email });
+    } catch (error) {
+      this.handleDBErrors(error);
+    }
+  }
+
   async blockUser(id: string): Promise<User> {
     const user = await this.findOne(id);
     user.isActive = false;
@@ -55,6 +64,11 @@ export class UsersService {
     if (error.code === '23505') {
       throw new BadRequestException(`the email already exist`);
     }
+
+    if (error.name === 'EntityNotFoundError') {
+      throw new NotFoundException(`user not found`);
+    }
+
     this.logger.error(error);
     throw new InternalServerErrorException('please check server logs');
   }

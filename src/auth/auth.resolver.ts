@@ -16,7 +16,9 @@ export class AuthResolver {
   }
 
   @Mutation(() => AuthResponseType)
-  async login(@Args('loginInput') loginInput: LoginInput) {
+  async login(
+    @Args('loginInput') loginInput: LoginInput,
+  ): Promise<AuthResponseType> {
     return this.authService.login(loginInput);
   }
 
