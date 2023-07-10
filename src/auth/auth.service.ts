@@ -1,21 +1,27 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { AuthResponseType } from './types/auth-response.type';
 import { SignupInput } from './dto/inputs/signup.input';
 import { LoginInput } from './dto/inputs/login.input';
 import { UsersService } from '../users/users.service';
+import { JwtService } from '@nestjs/jwt';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly userService: UsersService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly userService: UsersService,
+  ) {}
 
   async signup(signupInput: SignupInput): Promise<AuthResponseType> {
     const user = await this.userService.createUser(signupInput);
-    const token = 'ABC1234';
-    return {
-      user,
-      token,
-    };
+    const token = this.jwtService.sign({ id: user.id });
+    return { user, token };
   }
 
   async login(loginInput: LoginInput): Promise<AuthResponseType> {
@@ -28,14 +34,28 @@ export class AuthService {
     if (!isSamePassword)
       throw new BadRequestException('email/password do not match');
 
-    const token = 'ABC1234';
+    const token = this.jwtService.sign({ id: user.id });
+
     return {
       user,
       token,
     };
   }
 
-  async revalidateToken() {
-    throw new Error('not implement');
+  async validateUser(id: string): Promise<User> {
+    const user = await this.userService.findOne(id);
+
+    if (!user.isActive) throw new UnauthorizedException('user is inactive');
+
+    delete user.password;
+    return user;
+  }
+
+  async revalidateToken(user: User) {
+    const token = this.jwtService.sign({ id: user.id });
+    return {
+      user,
+      token,
+    };
   }
 }

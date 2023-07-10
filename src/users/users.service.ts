@@ -38,11 +38,11 @@ export class UsersService {
   }
 
   async findOne(id: string): Promise<User> {
-    const user = this.userRepository.findOneBy({ id });
-
-    if (!user) throw new BadRequestException(`user ${id} not found`);
-
-    return user;
+    try {
+      return await this.userRepository.findOneByOrFail({ id });
+    } catch (error) {
+      this.handleDBErrors(error);
+    }
   }
 
   async findOneByEmail(email: string): Promise<User> {
