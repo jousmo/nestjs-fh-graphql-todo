@@ -9,8 +9,8 @@ export class UsersResolver {
 
   @Query(() => [User], { name: 'users' })
   async findAll(@Args() validRolesArg: ValidRolesArg): Promise<User[]> {
-    console.log({ validRolesArg });
-    return this.usersService.findAll();
+    const { roles } = validRolesArg;
+    return this.usersService.findAll(roles);
   }
 
   @Query(() => User, { name: 'user' })
