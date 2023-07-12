@@ -39,7 +39,7 @@ type Query {
   items: [Item!]!
   revalidateToken: AuthResponseType!
   user(id: ID!): User!
-  users: [User!]!
+  users(roles: [ValidRolesEnum!] = []): [User!]!
 }
 
 input SignupInput {
@@ -61,4 +61,10 @@ type User {
   id: ID!
   isActive: Boolean!
   roles: [String!]!
+}
+
+enum ValidRolesEnum {
+  admin
+  superUser
+  user
 }
