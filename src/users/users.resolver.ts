@@ -2,7 +2,7 @@ import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { ValidRolesArg } from './dto/args/valid-roles.arg';
-import { UseGuards } from '@nestjs/common';
+import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { ValidRolesEnum } from '../auth/enums/valid-roles.enum';
@@ -24,7 +24,7 @@ export class UsersResolver {
 
   @Query(() => User, { name: 'user' })
   async findOne(
-    @Args('id', { type: () => ID }) id: string,
+    @Args('id', { type: () => ID }, ParseUUIDPipe) id: string,
     @CurrentUser([ValidRolesEnum.admin]) user: User,
   ): Promise<User> {
     console.log('User', { user });
@@ -33,7 +33,7 @@ export class UsersResolver {
 
   @Mutation(() => User)
   blockUser(
-    @Args('id', { type: () => ID }) id: string,
+    @Args('id', { type: () => ID }, ParseUUIDPipe) id: string,
     @CurrentUser([ValidRolesEnum.admin]) user: User,
   ) {
     console.log('User', { user });
