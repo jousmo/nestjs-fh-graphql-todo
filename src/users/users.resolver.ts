@@ -36,7 +36,6 @@ export class UsersResolver {
     @Args('id', { type: () => ID }, ParseUUIDPipe) id: string,
     @CurrentUser([ValidRolesEnum.admin]) user: User,
   ) {
-    console.log('User', { user });
-    return this.usersService.blockUser(id);
+    return this.usersService.blockUser(id, user);
   }
 }

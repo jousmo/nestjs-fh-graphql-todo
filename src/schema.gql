@@ -60,6 +60,7 @@ type User {
   fullName: String!
   id: ID!
   isActive: Boolean!
+  lastUpdatedBy: User
   roles: [String!]!
 }
 

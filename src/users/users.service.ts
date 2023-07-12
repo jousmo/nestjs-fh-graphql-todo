@@ -60,9 +60,10 @@ export class UsersService {
     }
   }
 
-  async blockUser(id: string): Promise<User> {
+  async blockUser(id: string, updatedUser: User): Promise<User> {
     const user = await this.findOne(id);
     user.isActive = false;
+    user.lastUpdatedBy = updatedUser;
 
     return this.userRepository.save(user);
   }
